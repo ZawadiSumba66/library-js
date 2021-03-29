@@ -28,8 +28,16 @@ add_book.addEventListener("click",addBookToLibrary)
 function addBookToLibrary() {
   const row = document.createElement('tr')
   const cell_1 = document.createElement('td')
-  cell_1.appendChild(book.title)
+  cell_1.textContent = book.title
   row.appendChild(cell_1)
 
-  
+  const cell_2 = document.createElement('td')
+  cell_2.textContent = book.author
+  row.appendChild(cell_2);
+
+
+  const cell_3 = document.createElement('td')
+  cell_3.textContent = book.pages
+  row.appendChild(cell_3);
+
 }
