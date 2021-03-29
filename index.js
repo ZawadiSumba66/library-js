@@ -1,21 +1,21 @@
-let title = document.getElementById('title');
+const title = document.getElementById('title');
 
-let author = document.getElementById('author');
+const author = document.getElementById('author');
 
-let pages = document.getElementById('pages');
+const pages = document.getElementById('pages');
 
-let button_read = document.getElementByClassName('button-read');
+const button_read = document.querySelector('.button-read');
 
-let add_book = document.getElementByClassName('add-book');
+const add_book = document.querySelector('.add-book');
 
-let table_body = document.querySelector('.table-body')
+const table_body = document.querySelector('.table-body')
 
 
 
 
 let myLibrary = [];
 let newBook
-let myLibrary
+
 
 function Book(title, author, pages, read = false) {
   this.title = title;
@@ -25,7 +25,7 @@ function Book(title, author, pages, read = false) {
 }
 
 add_book.addEventListener("click",addBookToLibrary)
-function addBookToLibrary() {
+function showcaseBooks(book) {
   const row = document.createElement('tr')
   const cell_1 = document.createElement('td')
   cell_1.textContent = book.title
@@ -43,34 +43,37 @@ function addBookToLibrary() {
   table_body.appendChild(row)
 }
 
-const book = [];
-book[1] = Book({
-  title: 'Harry Potter',
-  author: 'Mark Donald',
-  pages: 300,
-  read: true
-});
+// const book = [];
+// book[1] = Book({
+//   title: 'Harry Potter',
+//   author: 'Mark Donald',
+//   pages: 300,
+//   read: true
+// });
 
-book[2] = Book({
-  title: 'The River and The Source',
-  author: 'Margaret Ogolla',
-  pages: '500',
-  read: true
-});
+// book[2] = Book({
+//   title: 'The River and The Source',
+//   author: 'Margaret Ogolla',
+//   pages: '500',
+//   read: true
+// });
 
-book[3] = Book({
-  title: 'Damu Nyeusi',
-  author: 'Ken Walibora',
-  pages: '700',
-  read: false
-}); 
+// book[3] = Book({
+//   title: 'Damu Nyeusi',
+//   author: 'Ken Walibora',
+//   pages: '700',
+//   read: false
+// }); 
 
 function updateBooks() {
-  myLibrary.forEach(({
-    book
-  } => {
-    
-  }))
+  myLibrary.forEach(({book})=> showcaseBooks(book))
 }
 
+function addBookToLibrary(){
+    if(myLibrary.some(({book})=> book.title === title.value))
+    return;
+    const book = new Book(title.value,author.value,pages.value)
 
+    myLibrary.push({book})
+    updateBooks();
+}
