@@ -4,9 +4,11 @@ let author = document.getElementById('author');
 
 let pages = document.getElementById('pages');
 
-let button_read = document.getElementById('button-read');
+let button_read = document.getElementByClassName('button-read');
 
-let add_book = document.getElementById('add-book');
+let add_book = document.getElementByClassName('add-book');
+
+let table_body = document.querySelector('.table-body')
 
 
 
@@ -22,8 +24,12 @@ function Book(title, author, pages, read = false) {
   this.read = read;
 }
 
-
-
+add_book.addEventListener("click",addBookToLibrary)
 function addBookToLibrary() {
-  // do stuff here
+  const row = document.createElement('tr')
+  const cell_1 = document.createElement('td')
+  cell_1.appendChild(book.title)
+  row.appendChild(cell_1)
+
+  
 }
