@@ -40,4 +40,37 @@ function addBookToLibrary() {
   cell_3.textContent = book.pages
   row.appendChild(cell_3);
 
+  table_body.appendChild(row)
 }
+
+const book = [];
+book[1] = Book({
+  title: 'Harry Potter',
+  author: 'Mark Donald',
+  pages: 300,
+  read: true
+});
+
+book[2] = Book({
+  title: 'The River and The Source',
+  author: 'Margaret Ogolla',
+  pages: '500',
+  read: true
+});
+
+book[3] = Book({
+  title: 'Damu Nyeusi',
+  author: 'Ken Walibora',
+  pages: '700',
+  read: false
+}); 
+
+function updateBooks() {
+  myLibrary.forEach(({
+    book
+  } => {
+    
+  }))
+}
+
+
