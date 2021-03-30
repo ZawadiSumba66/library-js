@@ -10,12 +10,10 @@ const add_book = document.querySelector('.add-book');
 
 const table_body = document.querySelector('.table-body')
 
-
+const checkRead = document.querySelector("#read")
 
 
 let myLibrary = [];
-let newBook
-
 
 function Book(title, author, pages, read = false) {
   this.title = title;
@@ -23,7 +21,9 @@ function Book(title, author, pages, read = false) {
   this.pages = pages;
   this.read = read;
 }
-
+Book.prototype.info = function () {
+    const alreadyRead = (this.read) ? 'already read' : 'not read yet';
+}
 add_book.addEventListener("click",addBookToLibrary)
 function showcaseBooks(book) {
   const row = document.createElement('tr')
@@ -40,8 +40,28 @@ function showcaseBooks(book) {
   cell_3.textContent = book.pages
   row.appendChild(cell_3);
 
+  const cell_4 = document.createElement('td')
+  const readButton = document.createElement('button')
+  readButton.addEventListener("click",changeRead)
+
+  book.read ? readButton.textContent = 'read' : readButton.textContent = 'unread';
+    cell_4.appendChild(readButton)
+    row.appendChild(cell_4);
+
+    const deleteButton=document.createElement('button');
+    deleteButton.innerHTML='Delete';
+    deleteButton.style.color='red';
+    row.appendChild(deleteButton);
+    deleteButton.addEventListener('click',(e)=>{
+    (e).preventDefault();
+    const trash=deleteButton.parentElement;
+    trash.remove(); 
+    })
+
   table_body.appendChild(row)
-}
+  }
+
+  
 
 // const book = [];
 // book[1] = Book({
@@ -66,14 +86,25 @@ function showcaseBooks(book) {
 // }); 
 
 function updateBooks() {
+    table_body.innerHTML=""
   myLibrary.forEach(({book})=> showcaseBooks(book))
 }
 
 function addBookToLibrary(){
     if(myLibrary.some(({book})=> book.title === title.value))
     return;
-    const book = new Book(title.value,author.value,pages.value)
+    const book = new Book(title.value,author.value,pages.value,checkRead.checked)
 
     myLibrary.push({book})
     updateBooks();
+    title.value="";
+    author.value="";
+    pages.value="";
+    checkRead.checked="";
+}
+
+function changeRead() {
+  const bookIndex = myLibrary[index];
+  bookIndex.read = !bookIndex.read;
+  updateBooks();
 }
