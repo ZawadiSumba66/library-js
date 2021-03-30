@@ -1,98 +1,103 @@
-const title = document.getElementById('title');
+const libraryItems = document.querySelector('.library-items');
+const addBookButton = document.querySelector('.add-book');
+const newBookForm = document.querySelector('.new-book-form');
+const headers = document.querySelectorAll('th');
 
-const author = document.getElementById('author');
+libraryItems.addEventListener('click', deleteBook);
+libraryItems.addEventListener('click', toggleRead);
 
-const pages = document.getElementById('pages');
+addBookButton.addEventListener('click', displayBookForm);
+newBookForm.addEventListener('submit', addBook);
+headers.forEach((header) => header.addEventListener('click', sortDisplay));
 
-const button_read = document.querySelector('.button-read');
-
-const add_book = document.querySelector('.add-book');
-
-const table_body = document.querySelector('.table-body')
-
-const checkRead = document.querySelector("#read")
-
-
-let myLibrary = [];
-const storedLibrary = localStorage.getItem('myLibrary');
-if(storedLibrary) {
-  myLibrary = JSON.parse(storedLibrary).map((book) => new Book(book));
-}
-
-function Book(title, author, pages, read = false) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-}
-
-add_book.addEventListener("click",addBookToLibrary)
-function showcaseBooks(book) {
-  const row = document.createElement('tr')
-  const cell_1 = document.createElement('td')
-  cell_1.textContent = book.title
-  row.appendChild(cell_1)
-
-  const cell_2 = document.createElement('td')
-  cell_2.textContent = book.author
-  row.appendChild(cell_2);
-
-
-  const cell_3 = document.createElement('td')
-  cell_3.textContent = book.pages
-  row.appendChild(cell_3);
-
-  const cell_4 = document.createElement('td')
-  const readButton = document.createElement('button')
-  readButton.addEventListener("click",changeRead)
-
-  book.read ? readButton.textContent = 'read' : readButton.textContent = 'unread';
-    cell_4.appendChild(readButton)
-    row.appendChild(cell_4);
-
-    // const deleteButton=document.createElement('button');
-    // deleteButton.innerHTML='Delete';
-    // deleteButton.style.color='red';
-    // row.appendChild(deleteButton);
-    // deleteButton.classList.add("delete")
-    // deleteButton.addEventListener('click', deleteBook);
-  table_body.appendChild(row)
+class Book {
+  constructor(params) {
+    this.title = params.title;
+    this.author = params.author;
+    this.pages = params.pages;
+    this.read = params.read;
   }
 
-// function deleteBook(e) {
-//   if (!e.target.matches('.delete')) return;
-//   myLibrary.splice(e.target.dataset.index, 1);
-//   localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-//   showcaseBooks();
-// }
-
-
-
-
-function updateBooks() {
-    table_body.innerHTML=""
-  myLibrary.forEach(({book})=> showcaseBooks(book))
+  toggleRead() {
+    this.read = !this.read;
+  }
 }
 
-function addBookToLibrary(book){
-    // if(myLibrary.some(({book})=> book.title === title.value))
-    // return;
-    // const book = new Book(title.value,author.value,pages.value,checkRead.checked)
-
-    myLibrary.push(book)
-    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-    updateBooks();
-    title.value="";
-    author.value="";
-    pages.value="";
-    checkRead.checked="";
+let library = [];
+const storedLibrary = localStorage.getItem('library');
+if (storedLibrary) {
+  library = JSON.parse(storedLibrary).map((book) => new Book(book));
 }
 
-function changeRead() {
-  const bookIndex = myLibrary[index];
-  bookIndex.read = !bookIndex.read;
-  localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
-  updateBooks();
+function addBookToLibrary(book) {
+  library.push(book);
+  localStorage.setItem('library', JSON.stringify(library));
 }
 
+function displayBooks(sortParam = null) {
+  libraryItems.innerHTML = library
+    .sort((a, b) => (a[sortParam] < b[sortParam] ? -1 : 1))
+    .map(
+      (book, i) => `
+      <tr>
+      <td>${book.title}</td>
+      <td>${book.author}</td>
+      <td>${book.pages}</td>
+      <td>
+        <button class='progress' data-index='${i}'>
+          ${
+            book.read
+              ? "<span class='material-icons'>No</span>"
+              : "<span class='material-icons'>Yes</span>"
+          }
+        </button>
+      </td>
+      <td><button class='delete' data-index='${i}'>Delete</button></td>
+      </tr>`
+    )
+    .join('');
+}
 
+function sortDisplay(e) {
+  param = e.target.textContent.toLowerCase().replace('?', '');
+  displayBooks(param);
+}
+
+function displayBookForm() {
+  addBookButton.classList.add('hidden');
+  newBookForm.classList.remove('hidden');
+}
+
+function hideBookForm() {
+  newBookForm.classList.add('hidden');
+  addBookButton.classList.remove('hidden');
+}
+
+function addBook(e) {
+  e.preventDefault();
+  book = new Book({
+    title: this.querySelector('[name=title]').value,
+    author: this.querySelector('[name=author]').value,
+    pages: this.querySelector('[name=pages]').value,
+    read: this.querySelector('[name=read]').value,
+  });
+  addBookToLibrary(book);
+  hideBookForm();
+  displayBooks();
+  this.reset();
+}
+
+function toggleRead(e) {
+  if (!e.target.matches('.progress')) return;
+  index = e.target.dataset.index;
+  library[index].toggleRead();
+  localStorage.setItem('library', JSON.stringify(library));
+  displayBooks();
+}
+
+function deleteBook(e) {
+  if (!e.target.matches('.delete')) return;
+  library.splice(e.target.dataset.index, 1);
+  localStorage.setItem('library', JSON.stringify(library));
+  displayBooks();
+}
