@@ -1,103 +1,98 @@
-const libraryItems = document.querySelector('.library-items');
-const addBookButton = document.querySelector('.add-book');
-const newBookForm = document.querySelector('.new-book-form');
-const headers = document.querySelectorAll('th');
+const title = document.getElementById('title');
 
-libraryItems.addEventListener('click', deleteBook);
-libraryItems.addEventListener('click', toggleRead);
+const author = document.getElementById('author');
 
-addBookButton.addEventListener('click', displayBookForm);
-newBookForm.addEventListener('submit', addBook);
-headers.forEach((header) => header.addEventListener('click', sortDisplay));
+const pages = document.getElementById('pages');
 
-class Book {
-  constructor(params) {
-    this.title = params.title;
-    this.author = params.author;
-    this.pages = params.pages;
-    this.read = params.read;
-  }
+const addBook = document.querySelector('.add-book');
 
-  toggleRead() {
-    this.read = !this.read;
-  }
-}
+const tableBody = document.querySelector('.table-body');
+
+const checkRead = document.querySelector('#read');
+
 
 let library = [];
-const storedLibrary = localStorage.getItem('library');
-if (storedLibrary) {
-  library = JSON.parse(storedLibrary).map((book) => new Book(book));
+
+function Book(title, author, pages, read = true) {
+  this.title = title;
+  this.author = author;
+  this.pages = pages;
+  this.read = read;
 }
 
-function addBookToLibrary(book) {
-  library.push(book);
-  localStorage.setItem('library', JSON.stringify(library));
+const myLibrary = localStorage.getItem('library');
+if (myLibrary) {
+  library = JSON.parse(myLibrary);
 }
 
-function displayBooks(sortParam = null) {
-  libraryItems.innerHTML = library
-    .sort((a, b) => (a[sortParam] < b[sortParam] ? -1 : 1))
-    .map(
-      (book, i) => `
-      <tr>
-      <td>${book.title}</td>
-      <td>${book.author}</td>
-      <td>${book.pages}</td>
-      <td>
-        <button class='progress' data-index='${i}'>
-          ${
-            book.read
-              ? "<span class='material-icons'>No</span>"
-              : "<span class='material-icons'>Yes</span>"
-          }
-        </button>
-      </td>
-      <td><button class='delete' data-index='${i}'>Delete</button></td>
-      </tr>`
-    )
-    .join('');
-}
+function showcaseBooks(book, index) {
+  const row = document.createElement('tr');
+  const cellOne = document.createElement('td');
+  cellOne.textContent = book.title;
+  row.appendChild(cellOne);
 
-function sortDisplay(e) {
-  param = e.target.textContent.toLowerCase().replace('?', '');
-  displayBooks(param);
-}
+  const cellTwo = document.createElement('td');
+  cellTwo.textContent = book.author;
+  row.appendChild(cellTwo);
 
-function displayBookForm() {
-  addBookButton.classList.add('hidden');
-  newBookForm.classList.remove('hidden');
-}
+  const cellThree = document.createElement('td');
+  cellThree.textContent = book.pages;
+  row.appendChild(cellThree);
 
-function hideBookForm() {
-  newBookForm.classList.add('hidden');
-  addBookButton.classList.remove('hidden');
-}
+  const cellFour = document.createElement('td');
+  const readButton = document.createElement('button');
+  readButton.setAttribute('data-index', index);
+  readButton.classList.add('read-check');
 
-function addBook(e) {
-  e.preventDefault();
-  book = new Book({
-    title: this.querySelector('[name=title]').value,
-    author: this.querySelector('[name=author]').value,
-    pages: this.querySelector('[name=pages]').value,
-    read: this.querySelector('[name=read]').value,
-  });
-  addBookToLibrary(book);
-  hideBookForm();
-  displayBooks();
-  this.reset();
-}
+  readButton.textContent = book.read ? 'read' : 'unread';
+  cellFour.appendChild(readButton);
+  row.appendChild(cellFour);
 
-function toggleRead(e) {
-  if (!e.target.matches('.progress')) return;
-  index = e.target.dataset.index;
-  library[index].toggleRead();
-  localStorage.setItem('library', JSON.stringify(library));
-  displayBooks();
+  const deleteButton = document.createElement('button');
+  deleteButton.innerHTML = 'Delete';
+  row.appendChild(deleteButton);
+  deleteButton.classList.add('delete');
+  tableBody.appendChild(row);
+  /* eslint-disable no-use-before-define */
+  deleteButton.addEventListener('click', deleteBook);
+  readButton.addEventListener('click', checkBox);
+  /* eslint-enable no-use-before-define */
 }
-
+/* eslint-disable no-use-before-define */
 function deleteBook(e) {
   if (!e.target.matches('.delete')) return;
   library.splice(e.target.dataset.index, 1);
   localStorage.setItem('library', JSON.stringify(library));
-  displayBooks();
+  updateBooks();
 }
+/* eslint-enable no-use-before-define */
+function updateBooks() {
+  tableBody.innerHTML = '';
+  library.forEach(({ book, index }) => showcaseBooks(book, index));
+}
+
+function addBookToLibrary() {
+  const book = new Book(title.value, author.value, pages.value, checkRead.checked);
+  if (library.some(({ book }) => book.title === title.value)) { return; }
+
+
+  library.push({ book });
+  localStorage.setItem('library', JSON.stringify(library));
+  title.value = '';
+  author.value = '';
+  pages.value = '';
+  checkRead.checked = '';
+
+  updateBooks();
+}
+
+function checkBox(e) {
+  const item = e.target;
+  const index = item.getAttribute('data-index');
+  const book = library[index];
+  book.read = !book.read;
+
+  updateBooks();
+}
+
+addBook.addEventListener('click', addBookToLibrary);
