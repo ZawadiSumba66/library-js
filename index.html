@@ -7,31 +7,38 @@
     <title>Document</title>
 </head>
 <body>
-    <h1 class="library-title">Library App</h1>
-    <!-- <form action=""> -->
-    <label for="title">Title</label><br>
-    <input type="text" id="title"><br><br>
-    <label for="author">Author</label><br>
-    <input type="text" id="author"><br><br>
-    <label for="pages">Pages</label><br>
-    <input type="text" id="pages"><br>
-    <p>Please check the box if you have read the book</p>
-    <input type="checkbox" id="read"><br><br>
-    <button class = "add-book">Add a new Book</button>
-<!-- </form> -->
-     <table>
-         <thead>
-             <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Pages</th>
-                <th>Read Status</th>
-             </tr>
-         </thead>
-         <tbody class="table-body">
-
-         </tbody>
-     </table>
+    <div class='wrapper'>
+        <h1>Library App</h1>
+    
+        <form class='new-book-form hidden'>
+          <input type='text' name='title' placeholder='Title' required>
+          <input type='text' name='author' placeholder='Author' required>
+          <input type='number' name='pages' placeholder='Pages'>
+          <div class='checkbox-container'>
+            <label for='read'>Read?</label>
+            <input type='text' name='read'>
+          </div>
+          <input type='submit' value='+ Add Book'>
+        </form>
+    
+        <button class='add-book'>Add Book</button>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Pages</th>
+              <th>Read?</th>
+              <th></th>
+            </tr>
+          </thead>
+      
+          <tbody class='library-items'>
+            <td>Loading...</td>
+          </tbody>
+        </table>
+      </div>
     <script src="index.js"></script>
 </body>
 </html>
