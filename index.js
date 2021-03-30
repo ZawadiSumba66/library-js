@@ -14,6 +14,10 @@ const checkRead = document.querySelector("#read")
 
 
 let myLibrary = [];
+const storedLibrary = localStorage.getItem('myLibrary');
+if(storedLibrary) {
+  myLibrary = JSON.parse(storedLibrary).map((book) => new Book(book));
+}
 
 function Book(title, author, pages, read = false) {
   this.title = title;
@@ -21,9 +25,7 @@ function Book(title, author, pages, read = false) {
   this.pages = pages;
   this.read = read;
 }
-Book.prototype.info = function () {
-    const alreadyRead = (this.read) ? 'already read' : 'not read yet';
-}
+
 add_book.addEventListener("click",addBookToLibrary)
 function showcaseBooks(book) {
   const row = document.createElement('tr')
@@ -48,54 +50,37 @@ function showcaseBooks(book) {
     cell_4.appendChild(readButton)
     row.appendChild(cell_4);
 
-    const deleteButton=document.createElement('button');
-    deleteButton.innerHTML='Delete';
-    deleteButton.style.color='red';
-    row.appendChild(deleteButton);
-    deleteButton.addEventListener('click',(e)=>{
-    (e).preventDefault();
-    const trash=deleteButton.parentElement;
-    trash.remove(); 
-    })
-
+    // const deleteButton=document.createElement('button');
+    // deleteButton.innerHTML='Delete';
+    // deleteButton.style.color='red';
+    // row.appendChild(deleteButton);
+    // deleteButton.classList.add("delete")
+    // deleteButton.addEventListener('click', deleteBook);
   table_body.appendChild(row)
   }
 
-  
+// function deleteBook(e) {
+//   if (!e.target.matches('.delete')) return;
+//   myLibrary.splice(e.target.dataset.index, 1);
+//   localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
+//   showcaseBooks();
+// }
 
-// const book = [];
-// book[1] = Book({
-//   title: 'Harry Potter',
-//   author: 'Mark Donald',
-//   pages: 300,
-//   read: true
-// });
 
-// book[2] = Book({
-//   title: 'The River and The Source',
-//   author: 'Margaret Ogolla',
-//   pages: '500',
-//   read: true
-// });
 
-// book[3] = Book({
-//   title: 'Damu Nyeusi',
-//   author: 'Ken Walibora',
-//   pages: '700',
-//   read: false
-// }); 
 
 function updateBooks() {
     table_body.innerHTML=""
   myLibrary.forEach(({book})=> showcaseBooks(book))
 }
 
-function addBookToLibrary(){
-    if(myLibrary.some(({book})=> book.title === title.value))
-    return;
-    const book = new Book(title.value,author.value,pages.value,checkRead.checked)
+function addBookToLibrary(book){
+    // if(myLibrary.some(({book})=> book.title === title.value))
+    // return;
+    // const book = new Book(title.value,author.value,pages.value,checkRead.checked)
 
-    myLibrary.push({book})
+    myLibrary.push(book)
+    localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
     updateBooks();
     title.value="";
     author.value="";
@@ -106,5 +91,8 @@ function addBookToLibrary(){
 function changeRead() {
   const bookIndex = myLibrary[index];
   bookIndex.read = !bookIndex.read;
+  localStorage.setItem('myLibrary', JSON.stringify(myLibrary));
   updateBooks();
 }
+
+
