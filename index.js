@@ -20,11 +20,6 @@ function Book(title, author, pages, read = false) {
   this.read = read;
 }
 
-const myLibrary = localStorage.getItem('library');
-if (myLibrary) {
-  library = JSON.parse(myLibrary);
-}
-
 function showcaseBooks(book, index) {
   const row = document.createElement('tr');
   const cellOne = document.createElement('td');
@@ -59,12 +54,12 @@ function showcaseBooks(book, index) {
   /* eslint-enable no-use-before-define */
 }
 /* eslint-disable no-use-before-define */
-function deleteBook(e) {
-  if (!e.target.matches('.delete')) return;
-  library.splice(e.target.dataset.index, 1);
-  localStorage.setItem('library', JSON.stringify(library));
-  updateBooks();
-}
+// function deleteBook(e) {
+//   if (!e.target.matches('.delete')) return;
+//   library.splice(e.target.dataset.index, 1);
+//   // localStorage.setItem('library', JSON.stringify(library));
+//   updateBooks();
+// }
 /* eslint-enable no-use-before-define */
 function updateBooks() {
   tableBody.innerHTML = '';
@@ -82,7 +77,6 @@ function addBookToLibrary(e) {
   author.value = '';
   pages.value = '';
   checkRead.checked = '';
-  localStorage.setItem('library', JSON.stringify(library));
 
   updateBooks();
 }
@@ -96,4 +90,3 @@ function checkBox(e) {
   updateBooks();
 }
 
-addBook.addEventListener('click', addBookToLibrary());
