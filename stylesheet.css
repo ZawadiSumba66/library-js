@@ -1,0 +1,45 @@
+body {
+  background-color: #d1b3ab;
+  height: 800vh;
+}
+
+.add-book {
+  background-color: #da5c3d;
+}
+
+#read {
+  width: 20px;
+  height: 20px;
+}
+
+.delete {
+  border: none;
+  background-color: red;
+  color: white;
+  margin-top: 3px;
+  font-weight: bold;
+}
+
+.read-check {
+  border: none;
+  background-color: #000;
+  color: white;
+  width: 100px;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+td,
+th {
+  width: 500px;
+}
+
+td {
+  color: black;
+  font-weight: 500;
+}
+
+.form {
+  display: none;
+}
