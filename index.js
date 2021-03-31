@@ -65,11 +65,13 @@ function updateBooks() {
   library.forEach(( book, index ) => showcaseBooks(book, index));
 }
 
+addBook.addEventListener('click', addBookToLibrary);
+
 function addBookToLibrary(e) {
   e.preventDefault()
   const book = new Book(title.value, author.value, pages.value, checkRead.checked);
   if (library.some((book ) => book.title === title.value)) { return; }
-  
+
   library.push( book );
   title.value = '';
   author.value = '';
