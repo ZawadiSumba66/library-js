@@ -14,6 +14,10 @@ const form = document.querySelector('form');
 
 const newBook = document.querySelector('.new-book')
 
+function toggleForm() {
+  form.classList.toggle('form');
+}
+
 let library = [];
 
 function Book(title, author, pages, read = false) {
@@ -93,8 +97,6 @@ function checkBox(e) {
   updateBooks();
 }
 
-function toggleForm() {
-  form.classList.toggle('form');
-}
+
 
 newBook.addEventListener('click',toggleForm)
