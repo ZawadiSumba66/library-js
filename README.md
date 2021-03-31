@@ -1,6 +1,12 @@
+![](https://img.shields.io/badge/Microverse-blueviolet)
 # Library App
 
 > A storage book app where users can enter the title,author and pages of the book and check the box if the have read the book 
+
+## Built With
+- JavaScript
+- HTML
+- CSS
 ## Getting Started
 
 - Clone the repo `https://github.com/ZawadiSumba66/library-js.git`
