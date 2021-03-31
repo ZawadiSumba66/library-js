@@ -54,12 +54,11 @@ function showcaseBooks(book, index) {
   /* eslint-enable no-use-before-define */
 }
 /* eslint-disable no-use-before-define */
-// function deleteBook(e) {
-//   if (!e.target.matches('.delete')) return;
-//   library.splice(e.target.dataset.index, 1);
-//   // localStorage.setItem('library', JSON.stringify(library));
-//   updateBooks();
-// }
+function deleteBook(e) {
+  if (!e.target.matches('.delete')) return;
+  library.splice(e.target.dataset.index, 1);
+  updateBooks();
+}
 /* eslint-enable no-use-before-define */
 function updateBooks() {
   tableBody.innerHTML = '';
@@ -70,8 +69,7 @@ function addBookToLibrary(e) {
   e.preventDefault()
   const book = new Book(title.value, author.value, pages.value, checkRead.checked);
   if (library.some((book ) => book.title === title.value)) { return; }
-
-
+  
   library.push( book );
   title.value = '';
   author.value = '';
