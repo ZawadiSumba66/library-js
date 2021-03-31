@@ -12,13 +12,13 @@ const checkRead = document.querySelector('#read');
 
 const form = document.querySelector('form');
 
-const newBook = document.querySelector('.new-book')
+const newBook = document.querySelector('.new-book');
 
 function toggleForm() {
   form.classList.toggle('form');
 }
 
-let library = [];
+const library = [];
 
 function Book(title, author, pages, read = false) {
   this.title = title;
@@ -69,17 +69,15 @@ function deleteBook(e) {
 /* eslint-enable no-use-before-define */
 function updateBooks() {
   tableBody.innerHTML = '';
-  library.forEach(( book, index ) => showcaseBooks(book, index));
+  library.forEach((book, index) => showcaseBooks(book, index));
 }
 
-addBook.addEventListener('click', addBookToLibrary);
-
 function addBookToLibrary(e) {
-  e.preventDefault()
+  e.preventDefault();
   const book = new Book(title.value, author.value, pages.value, checkRead.checked);
-  if (library.some((book ) => book.title === title.value)) { return; }
+  if (library.some((book) => book.title === title.value)) { return; }
 
-  library.push( book );
+  library.push(book);
   title.value = '';
   author.value = '';
   pages.value = '';
@@ -87,6 +85,8 @@ function addBookToLibrary(e) {
 
   updateBooks();
 }
+
+addBook.addEventListener('click', addBookToLibrary);
 
 function checkBox(e) {
   const item = e.target;
@@ -98,5 +98,4 @@ function checkBox(e) {
 }
 
 
-
-newBook.addEventListener('click',toggleForm)
+newBook.addEventListener('click', toggleForm);
