@@ -13,7 +13,7 @@ const checkRead = document.querySelector('#read');
 
 let library = [];
 
-function Book(title, author, pages, read = true) {
+function Book(title, author, pages, read = false) {
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -61,38 +61,39 @@ function showcaseBooks(book, index) {
 /* eslint-disable no-use-before-define */
 function deleteBook(e) {
   if (!e.target.matches('.delete')) return;
-  library.splice(e.target.dataset.index, 1);
+  library.splice(e.target.daitaset.index, 1);
   localStorage.setItem('library', JSON.stringify(library));
   updateBooks();
 }
 /* eslint-enable no-use-before-define */
 function updateBooks() {
   tableBody.innerHTML = '';
-  library.forEach(({ book, index }) => showcaseBooks(book, index));
+  library.forEach(( book, index ) => showcaseBooks(book, index));
 }
 
-function addBookToLibrary() {
+function addBookToLibrary(e) {
+  e.preventDefault()
   const book = new Book(title.value, author.value, pages.value, checkRead.checked);
-  if (library.some(({ book }) => book.title === title.value)) { return; }
+  if (library.some((book ) => book.title === title.value)) { return; }
 
 
-  library.push({ book });
-  localStorage.setItem('library', JSON.stringify(library));
+  library.push( book );
   title.value = '';
   author.value = '';
   pages.value = '';
   checkRead.checked = '';
+  localStorage.setItem('library', JSON.stringify(library));
 
   updateBooks();
 }
 
 function checkBox(e) {
   const item = e.target;
-  const index = item.getAttribute('data-index');
-  const book = library[index];
-  book.read = !book.read;
+  const bookIndex = item.getAttribute('data-index');
+  const bookToggle = library[bookIndex];
+  bookToggle.read = !bookToggle.read;
 
   updateBooks();
 }
 
-addBook.addEventListener('click', addBookToLibrary);
+addBook.addEventListener('click', addBookToLibrary());
