@@ -10,6 +10,9 @@ const tableBody = document.querySelector('.table-body');
 
 const checkRead = document.querySelector('#read');
 
+const form = document.querySelector('form');
+
+const newBook = document.querySelector('.new-book')
 
 let library = [];
 
@@ -90,3 +93,8 @@ function checkBox(e) {
   updateBooks();
 }
 
+function toggleForm() {
+  form.classList.toggle('form');
+}
+
+newBook.addEventListener('click',toggleForm)
