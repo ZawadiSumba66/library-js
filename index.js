@@ -61,7 +61,7 @@ function showcaseBooks(book, index) {
 /* eslint-disable no-use-before-define */
 function deleteBook(e) {
   if (!e.target.matches('.delete')) return;
-  library.splice(e.target.daitaset.index, 1);
+  library.splice(e.target.dataset.index, 1);
   localStorage.setItem('library', JSON.stringify(library));
   updateBooks();
 }
